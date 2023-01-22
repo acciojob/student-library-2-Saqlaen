@@ -125,4 +125,21 @@ public class Student {
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
     }
+
+	public Student(String name, int age, String country) {
+		super();
+		this.name = name;
+		this.age = age;
+		this.country = country;
+	}
+
+	public Student(String emailId, String name, int age, String country) {
+		super();
+		this.emailId = emailId;
+		this.name = name;
+		this.age = age;
+		this.country = country;
+	}
+    
+    
 }
