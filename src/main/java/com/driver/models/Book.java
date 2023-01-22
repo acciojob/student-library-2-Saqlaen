@@ -76,7 +76,7 @@ public class Book {
         this.card = card;
     }
 
-    public boolean isAvailable() {
+    public boolean getAvailable() {
         return available;
     }
 

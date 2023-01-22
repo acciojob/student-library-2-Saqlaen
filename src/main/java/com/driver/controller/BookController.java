@@ -31,20 +31,26 @@ public class BookController {
                                    @RequestParam(value = "author", required = false) String author){
         
         List<Book> bookList = new ArrayList<>(); //find the elements of the list by yourself
-        if( author == null ){
-            bookList = this.bookService.findBooksByGenre( genre, available );
+        if( author != null && genre!= null && available == true ){
+            bookList = this.bookService.findBooksByGenreAuthor( genre, author, available );
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
         }
         else if( genre == null ){
             bookList = this.bookService.findBooksByAuthor( author, available);
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
         }
-        else if( author == null && genre == null ){
-            bookList = this.bookService.findByAvailability( available );
+        else if( author == null ){
+            bookList = this.bookService.findBooksByGenre( genre, available );
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
+        }
+        else if( available == false ) {
+        	bookList = this.bookService.findBooksByAvailability(available);
+        	return new ResponseEntity<>(bookList, HttpStatus.OK);
         }
         else{
-            bookList = this.bookService.findBooksByGenreAuthor( genre, author, available );
+        	bookList = this.bookService.findBooksByCardAvailable();
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(bookList, HttpStatus.OK);
 
     }
 }
