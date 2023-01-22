@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
@@ -27,6 +28,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Modifying
     @Transactional
     @Query("update Book b set b.available =:#{#book.available}, b.card =:#{#book.card} where b.id =:#{#book.id}")
-    int updateBook(Book book);
+    int updateBook( Book book );
 
 }

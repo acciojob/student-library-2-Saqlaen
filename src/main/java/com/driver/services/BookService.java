@@ -22,4 +22,20 @@ public class BookService {
         List<Book> books = null; //find the elements of the list by yourself
         return books;
     }
+
+    public List<Book> findBooksByGenre( String genre, boolean available ){
+        return this.bookRepository2.findBooksByGenre( genre, available );
+    }
+
+    public List<Book> findBooksByAuthor( String auhorname, boolean available ){
+        return this.bookRepository2.findBooksByAuthor( auhorname, available );
+    }
+
+    public List<Book> findByAvailability( boolean available ){
+        return this.bookRepository2.findByAvailability(  available );
+    }
+
+    public List<Book> findBooksByGenreAuthor( String genre, String author, boolean available ){
+        return this.bookRepository2.findBooksByGenreAuthor( genre, author, available );
+    }
 }

@@ -1,5 +1,7 @@
 package com.driver.services;
 
+import com.driver.models.Book;
+import com.driver.models.Card;
 import com.driver.models.Transaction;
 import com.driver.models.TransactionStatus;
 import com.driver.repositories.BookRepository;
@@ -9,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TransactionService {
@@ -17,8 +22,10 @@ public class TransactionService {
     @Autowired
     BookRepository bookRepository5;
 
+
     @Autowired
     CardRepository cardRepository5;
+
 
     @Autowired
     TransactionRepository transactionRepository5;
@@ -43,32 +50,32 @@ public class TransactionService {
         // If it fails: throw new Exception("Book limit has reached for this card");
         //If the transaction is successful, save the transaction to the list of transactions and return the id
 
-        Book book = this.bookRepository5.findById( bookId );
-        Card card = this.cardRepository5.findById( cardId );
-        if( book == null ){
+        Optional<Book> book = this.bookRepository5.findById( bookId );
+        Optional<Card> card = this.cardRepository5.findById( cardId );
+        if( !book.isPresent() ){
             throw new Exception("Book is either unavailable or not present");
         }
-        if( card == null ){
+        if( !card.isPresent() ){
             throw new Exception("Card is invalid");
         }
 
-        int noOfBooks = card.books.size();
+        int noOfBooks = card.get().getBooks().size();
         if( noOfBooks >= max_allowed_books ){
             throw new Exception("Book limit has reached for this card");
         }
 
-        this.bookRepository5.update( book );
+        this.bookRepository5.updateBook( book.get() );
 
         Transaction transaction = new Transaction();
-        transaction.transactionStatus = TransactionStatus.SUCCESSFUL;
-        transaction.card = this.card;
-        transaction.book = this.book;
-        transaction.isIssueOperation = true;
+        transaction.setTransactionStatus( TransactionStatus.SUCCESSFUL );
+        transaction.setCard( card.get() );
+        transaction.setBook( book.get() );
+        transaction.setIssueOperation(true);
         //Note that the error message should match exactly in all cases
         this.transactionRepository5.save( transaction );
 
 
-       return transaction.transactionId; //return transactionId instead
+       return transaction.getTransactionId(); //return transactionId instead
     }
 
     public Transaction returnBook(int cardId, int bookId) throws Exception{
@@ -80,17 +87,39 @@ public class TransactionService {
         //make the book available for other users
         //make a new transaction for return book which contains the fine amount as well
 
-        Transaction transactionNew = new Transaction();
-        transactionNew.transactionStatus = TransactionStatus.SUCCESSFUL;
-        transactionNew.card = this.card;
-        transactionNew.book = this.book;
+        Optional<Book> book = this.bookRepository5.findById( bookId );
+        Optional<Card> card = this.cardRepository5.findById( cardId );
+
+        if( !book.isPresent() ){
+            throw new Exception("Book is either unavailable or not present");
+        }
+        if( !card.isPresent() ){
+            throw new Exception("Card is invalid");
+        }
+
+        Transaction returnBookTransaction = new Transaction();
+        returnBookTransaction.setTransactionStatus( TransactionStatus.SUCCESSFUL );
+        returnBookTransaction.setCard( card.get() );
+        returnBookTransaction.setBook( book.get() );
         this.transactionRepository5.save( transaction );
 
-        Date prevDate = this.transaction.transactionDate;
-        Date currDate = this.transactionNew
+        Date prevDate = transaction.getTransactionDate();
+        Date currDate = returnBookTransaction.getTransactionDate();
 
+        long prevdatetime = prevDate.getTime();
+        long currdateTime = currDate.getTime();
+        long timeDiff = Math.abs( currdateTime - prevdatetime );
+        long daysDiff = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS );
+        long maxAllowed = (long)getMax_allowed_days;
 
-        Transaction returnBookTransaction  = null;
+        if( daysDiff < maxAllowed ){
+            returnBookTransaction.setFineAmount( 0 );
+        }
+        else{
+            long fineForNoOfDays = maxAllowed - daysDiff;
+            returnBookTransaction.setFineAmount( fine_per_day * (int)fineForNoOfDays  );
+        }
+
         return returnBookTransaction; //return the transaction after updating all details
     }
 }
