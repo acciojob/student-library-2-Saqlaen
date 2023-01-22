@@ -43,9 +43,32 @@ public class TransactionService {
         // If it fails: throw new Exception("Book limit has reached for this card");
         //If the transaction is successful, save the transaction to the list of transactions and return the id
 
-        //Note that the error message should match exactly in all cases
+        Book book = this.bookRepository5.findById( bookId );
+        Card card = this.cardRepository5.findById( cardId );
+        if( book == null ){
+            throw new Exception("Book is either unavailable or not present");
+        }
+        if( card == null ){
+            throw new Exception("Card is invalid");
+        }
 
-       return null; //return transactionId instead
+        int noOfBooks = card.books.size();
+        if( noOfBooks >= max_allowed_books ){
+            throw new Exception("Book limit has reached for this card");
+        }
+
+        this.bookRepository5.update( book );
+
+        Transaction transaction = new Transaction();
+        transaction.transactionStatus = TransactionStatus.SUCCESSFUL;
+        transaction.card = this.card;
+        transaction.book = this.book;
+        transaction.isIssueOperation = true;
+        //Note that the error message should match exactly in all cases
+        this.transactionRepository5.save( transaction );
+
+
+       return transaction.transactionId; //return transactionId instead
     }
 
     public Transaction returnBook(int cardId, int bookId) throws Exception{
@@ -56,6 +79,16 @@ public class TransactionService {
         //for the given transaction calculate the fine amount considering the book has been returned exactly when this function is called
         //make the book available for other users
         //make a new transaction for return book which contains the fine amount as well
+
+        Transaction transactionNew = new Transaction();
+        transactionNew.transactionStatus = TransactionStatus.SUCCESSFUL;
+        transactionNew.card = this.card;
+        transactionNew.book = this.book;
+        this.transactionRepository5.save( transaction );
+
+        Date prevDate = this.transaction.transactionDate;
+        Date currDate = this.transactionNew
+
 
         Transaction returnBookTransaction  = null;
         return returnBookTransaction; //return the transaction after updating all details
