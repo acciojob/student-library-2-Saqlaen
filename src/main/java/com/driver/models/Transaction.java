@@ -38,6 +38,9 @@ public class Transaction {
     @CreationTimestamp
     private Date transactionDate;
 
+    public Transaction() {
+    }
+
     public int getId() {
         return id;
     }
@@ -99,6 +102,17 @@ public class Transaction {
     }
 
     public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public Transaction(int id, String transactionId, Card card, Book book, int fineAmount, boolean isIssueOperation, TransactionStatus transactionStatus, Date transactionDate) {
+        this.id = id;
+        this.transactionId = transactionId;
+        this.card = card;
+        this.book = book;
+        this.fineAmount = fineAmount;
+        this.isIssueOperation = isIssueOperation;
+        this.transactionStatus = transactionStatus;
         this.transactionDate = transactionDate;
     }
 }

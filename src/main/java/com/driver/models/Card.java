@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 public class Card {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -82,5 +83,13 @@ public class Card {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public Card(int id, Student student, Date createdOn, Date updatedOn, CardStatus cardStatus) {
+        this.id = id;
+        this.student = student;
+        this.createdOn = createdOn;
+        this.updatedOn = updatedOn;
+        this.cardStatus = cardStatus;
     }
 }
