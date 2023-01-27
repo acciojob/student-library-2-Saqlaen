@@ -23,65 +23,15 @@ public class BookService {
     }
 
     public List<Book> getBooks(String genre, boolean available, String author){
-        List<Book> books = this.bookRepository2.findAll();
-        
-        if( author == null ) {
-        	books = findBooksByGenre(genre, available);
-        	return books;
-        }
-        if( genre == null ) {
-        	books = findBooksByAuthor(author, available);
-        	return books;
-        }
-        if( available == false ) {
-        	books = findBooksByAvailability(available);
-        	return books;
-        }
+    	if(genre != null && author != null){
+            return bookRepository2.findBooksByGenreAuthor(genre, author, available);
+        }else if(genre != null){
+            return bookRepository2.findBooksByGenre(genre, available);
+        }else if(author != null){
+           return bookRepository2.findBooksByAuthor(author, available);
+        }else{
+           return bookRepository2.findByAvailability(available);
+        }  	
 
-        return books;        	
-
-    }
-
-    public List<Book> findBooksByGenre( String genre, boolean available ){
-        return this.bookRepository2.findBooksByGenre( genre, available );
-    }
-
-    public List<Book> findBooksByAuthor( String auhorname, boolean available ){
-        return this.bookRepository2.findBooksByAuthor( auhorname, available );
-    }
-
-    public List<Book> findByAvailability( boolean available ){
-        return this.bookRepository2.findByAvailability(  available );
-    }
-
-    public List<Book> findBooksByGenreAuthor( String genre, String author, boolean available ){
-        return this.bookRepository2.findBooksByGenreAuthor( genre, author, available );
-    }
-    
-    public List<Book> findBooksByAvailability( boolean available ){
-    	List<Book> books = this.bookRepository2.findAll();
-    	List<Book> filtered = new ArrayList<>();
-    	for( Book book  : books ) {
-    		if( book.getAvailable() == available ) {
-    			filtered.add( book );
-    		}
-    	}
-    	return filtered;
-    }
-    
-    public List<Book> findBooksByCardAvailable(){
-    	List<Book> books = this.bookRepository2.findAll();
-    	List<Book> filtered = new ArrayList<>();
-    	for( Book book  : books ) {
-    		Card card = book.getCard();
-    		if( card.getCardStatus() == CardStatus.DEACTIVATED ) {
-    			filtered.add(book);
-    		}
-    	}
-    	return filtered;
-    }
-    
-    public List<Book> findAllBooks(){
-    	return this.bookRepository2.findAll();
     }
 }
