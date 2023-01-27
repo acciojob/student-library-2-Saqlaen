@@ -18,11 +18,21 @@ public class BookService {
     BookRepository bookRepository2;
 
     public void createBook(Book book){
-        bookRepository2.save(book);
+        this.bookRepository2.save(book);
     }
 
     public List<Book> getBooks(String genre, boolean available, String author){
-        List<Book> books = null; //find the elements of the list by yourself
+        List<Book> books = findBooksByGenreAuthor(genre, author, available);
+        
+        if( author == null ) {
+        	books = findBooksByGenre(genre, available);
+        }
+        else if( genre == null ) {
+        	books = findBooksByAuthor(author, available);
+        }
+        else if( available == false ) {
+        	books = findBooksByAvailability(available);
+        }
         return books;
     }
 
@@ -63,5 +73,9 @@ public class BookService {
     		}
     	}
     	return filtered;
+    }
+    
+    public List<Book> findAllBooks(){
+    	return this.bookRepository2.findAll();
     }
 }
