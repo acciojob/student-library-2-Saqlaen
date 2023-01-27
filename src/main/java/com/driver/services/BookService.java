@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -22,18 +23,23 @@ public class BookService {
     }
 
     public List<Book> getBooks(String genre, boolean available, String author){
-        List<Book> books = findBooksByGenreAuthor(genre, author, available);
+        List<Book> books = this.bookRepository2.findAll();
         
         if( author == null ) {
         	books = findBooksByGenre(genre, available);
+        	return books;
         }
-        else if( genre == null ) {
+        if( genre == null ) {
         	books = findBooksByAuthor(author, available);
+        	return books;
         }
-        else if( available == false ) {
+        if( available == false ) {
         	books = findBooksByAvailability(available);
+        	return books;
         }
-        return books;
+
+        return books;        	
+
     }
 
     public List<Book> findBooksByGenre( String genre, boolean available ){
