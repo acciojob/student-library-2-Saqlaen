@@ -5,7 +5,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -122,5 +121,8 @@ public class Transaction {
         this.transactionStatus = transactionStatus;
         this.transactionDate = transactionDate;
     }
+
+    
+    
 }
 
