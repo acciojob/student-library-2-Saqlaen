@@ -14,6 +14,7 @@ public class StudentController {
     @Autowired
     StudentService studentservice;
 
+
     //Add required annotations
     @GetMapping(" /student/studentByEmail")
     public ResponseEntity<?> getStudentByEmail(@RequestParam("email") String email){

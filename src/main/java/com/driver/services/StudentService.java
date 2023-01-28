@@ -31,7 +31,6 @@ public class StudentService {
 
     public void createStudent(Student student){
         Card cardGeneratedForStudent = this.cardService4.createAndReturn( student );
-        student.setCard( cardGeneratedForStudent );
         this.studentRepository4.save( student );
     }
 
@@ -41,6 +40,8 @@ public class StudentService {
 
     public void deleteStudent(int id){
         //Delete student and deactivate corresponding card
-        this.studentRepository4.deleteCustom( id );
+        this.cardService4.deactivateCard(id);
+    	this.studentRepository4.deleteCustom( id );
+        
     }
 }

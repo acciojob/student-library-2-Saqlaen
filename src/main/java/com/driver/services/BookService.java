@@ -13,25 +13,22 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookService {
-
-
     @Autowired
-    BookRepository bookRepository2;
+    BookRepository bookRepository;
 
     public void createBook(Book book){
-        this.bookRepository2.save(book);
+        bookRepository.save(book);
     }
 
     public List<Book> getBooks(String genre, boolean available, String author){
-    	if(genre != null && author != null){
-            return bookRepository2.findBooksByGenreAuthor(genre, author, available);
+        if(genre != null && author != null){
+            return bookRepository.findBooksByGenreAuthor(genre, author, available);
         }else if(genre != null){
-            return bookRepository2.findBooksByGenre(genre, available);
+            return bookRepository.findBooksByGenre(genre, available);
         }else if(author != null){
-           return bookRepository2.findBooksByAuthor(author, available);
+           return bookRepository.findBooksByAuthor(author, available);
         }else{
-           return bookRepository2.findByAvailability(available);
-        }  	
-
+           return bookRepository.findByAvailability(available);
+        }
     }
 }

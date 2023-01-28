@@ -12,24 +12,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/book")
 public class BookController {
-
     @Autowired
     BookService bookService;
 
-    //Write createBook API with required annotations
-    @PostMapping("/book")
-    public ResponseEntity<?> createBook( @RequestBody Book book ){
-        this.bookService.createBook( book );
-        return new ResponseEntity<>("Success", HttpStatus.CREATED );
+    @PostMapping("/")
+    public ResponseEntity createBook(@RequestBody Book book){
+        bookService.createBook(book);
+        return new ResponseEntity<>("the book is added successfully", HttpStatus.CREATED);
     }
 
-    //Add required annotations
-    @GetMapping("/book")
-    public ResponseEntity<?> getBooks(@RequestParam(value = "genre", required = false) String genre,
+
+    @GetMapping("/")
+    public ResponseEntity getBooks(@RequestParam(value = "genre", required = false) String genre,
                                    @RequestParam(value = "available", required = false, defaultValue = "false") boolean available,
                                    @RequestParam(value = "author", required = false) String author){
-        
-        List<Book> bookList = this.bookService.getBooks(genre, available, author);
-        return new ResponseEntity<>( bookList, HttpStatus.FOUND );
+
+        List<Book> bookList = bookService.getBooks(genre, available, author);
+
+        return new ResponseEntity<>(bookList, HttpStatus.OK);
+
     }
 }
