@@ -92,4 +92,10 @@ public class Card {
         this.updatedOn = updatedOn;
         this.cardStatus = cardStatus;
     }
+
+	@Override
+	public String toString() {
+		return "Card [id=" + id + ", student=" + student + ", createdOn=" + createdOn + ", updatedOn=" + updatedOn
+				+ ", cardStatus=" + cardStatus + ", books=" + books + "]";
+	}
 }

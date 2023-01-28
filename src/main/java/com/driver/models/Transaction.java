@@ -11,7 +11,14 @@ import java.util.UUID;
 @Entity
 public class Transaction {
 
-    @Id
+    @Override
+	public String toString() {
+		return "Transaction [id=" + id + ", transactionId=" + transactionId + ", card=" + card + ", book=" + book
+				+ ", fineAmount=" + fineAmount + ", isIssueOperation=" + isIssueOperation + ", transactionStatus="
+				+ transactionStatus + ", transactionDate=" + transactionDate + "]";
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

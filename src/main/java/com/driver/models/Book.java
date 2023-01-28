@@ -106,6 +106,12 @@ public class Book {
 		this.genre = genre;
 		this.author = author;
 	}
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", name=" + name + ", genre=" + genre + ", author=" + author + ", card=" + card
+				+ ", available=" + available + ", transactions=" + transactions + "]";
+	}
     
     
 }

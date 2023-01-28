@@ -8,6 +8,9 @@ import com.driver.models.TransactionStatus;
 import com.driver.repositories.BookRepository;
 import com.driver.repositories.CardRepository;
 import com.driver.repositories.TransactionRepository;
+
+import javassist.compiler.SymbolTable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,12 +25,8 @@ public class TransactionService {
 
     @Autowired
     BookRepository bookRepository5;
-
-
     @Autowired
     CardRepository cardRepository5;
-
-
     @Autowired
     TransactionRepository transactionRepository5;
 
@@ -51,8 +50,11 @@ public class TransactionService {
         // If it fails: throw new Exception("Book limit has reached for this card");
         //If the transaction is successful, save the transaction to the list of transactions and return the id
 
-        Book book = this.bookRepository5.findById( bookId ).get();
-        Card card = this.cardRepository5.findById( cardId ).get();
+        Book book = bookRepository5.findById( bookId ).get();
+        Card card = cardRepository5.findById( cardId ).get();
+        
+        System.out.println( book.toString() );
+        System.out.println( card.toString() );
 
         Transaction transaction = new Transaction();
         
@@ -64,7 +66,7 @@ public class TransactionService {
         //book should be available 
         if( book == null || !book.isAvailable() ){
         	transaction.setTransactionStatus(TransactionStatus.FAILED);
-        	this.transactionRepository5.save( transaction );
+        	transactionRepository5.save( transaction );
             throw new Exception("Book is either unavailable or not present");
         }
         
